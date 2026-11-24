@@ -1,6 +1,6 @@
 # PLANO — Curso 1 · Servidor MCP do seu serviço (Formação WebMCP v7.2)
 
-Repo `inematds/formacao-webmcp-mcp-v72`. Público: dev que roda Node (ou Python) e quer um servidor MCP testado e ligado ao Claude Code/Codex. Escrito em 19/10/2026, antes do conteúdo. Fontes: `../wifi/longrun/2026-10-19-formacao-webmcp-v72/{CURRICULO,AUDITORIA-LOCAL,PESQUISA-ESTADO-DA-ARTE,BRIEF-CURSO}.md`.
+Repo `linnoff88-dev/formacao-webmcp-mcp-v72`. Público: dev que roda Node (ou Python) e quer um servidor MCP testado e ligado ao Claude Code/Codex. Escrito em 19/10/2026, antes do conteúdo. Fontes: `../wifi/longrun/2026-10-19-formacao-webmcp-v72/{CURRICULO,AUDITORIA-LOCAL,PESQUISA-ESTADO-DA-ARTE,BRIEF-CURSO}.md`.
 
 ## Decisão sobre o SDK (risco anotado no CURRICULO)
 
@@ -42,13 +42,13 @@ Legenda: **confere** (com a PESQUISA ou com o SDK testado) · **velho** (substit
 | `cerebro-mcp/package.json` | `@modelcontextprotocol/sdk` 1.30.0 | **velho** | 2.3.1 (v2) |
 | `webmcp-3-integrator/.../modulo-2-1` | uma responsabilidade por ferramenta, nome/descrição que dizem a intenção, entrada mínima, estado e próxima ação verificáveis | **confere** (princípio estável, PESQUISA "estável") | adaptado ao MCP: `description`, `inputSchema` (Zod → JSON Schema 2020-12), `annotations` (`readOnlyHint`, `destructiveHint`, `idempotentHint`), `outputSchema`/`structuredContent`, `isError` |
 | `webmcp-5-expert` (lado MCP) | MCP sem stateless, sem `server/discover`, sem MRTR, sem OAuth com `iss` | **velho** | aulas 4–6 |
-| `inema-agent-runtime/runtime/` | capacidades e política de execução | **confere** como ideia (aprovar ferramenta, escopo mínimo) | só citado na aula 8 |
+| `ARCKHÉ-agent-runtime/runtime/` | capacidades e política de execução | **confere** como ideia (aprovar ferramenta, escopo mínimo) | só citado na aula 8 |
 | PESQUISA §2.4 | MCP Apps = 1ª extensão oficial, 26/01/2026, Claude web/desktop, Goose, VS Code Insiders | **confere** (post oficial) | aula 7 |
 | PESQUISA §2.5 | Registry "currently in preview" | **confere** (quickstart do registry, commit 11b7b0e de 11/10/2026: "Breaking changes or data resets may occur") | aula 8 com selo "preview" |
 | PESQUISA §2.2 | OAuth com `iss` (RFC 9207) | **confere** — no SDK a validação de `iss` é do **cliente** (`finishAuth`, doc `clients/oauth.md`); o servidor (resource server) verifica o token e publica RFC 9728 | aula 6 diz isso; não afirma que o servidor valida `iss` |
 | doc do SDK `real-host.md` | "um `console.log` e o host derruba a conexão" | **sem confirmação no nosso teste**: cliente do SDK 2.3.1 e Inspector 2.11.0 pularam a linha suja (19/10/2026) | aula 2: "log em stderr é a regra; não conte com a tolerância do cliente" |
 
-Baseline dos repos de fonte (não alterados), 19/10/2026: webmcp-1-formacao eb037fb · webmcp-2-builder 676c46e · webmcp-3-integrator 1c81fe8 · webmcp-4-agent-developer f4d8c69 · webmcp-5-expert c1ee007 · webmcp-readiness 9ae7d73 · aiv2026 097d98f · astra-computer-use 30ad91a · agi-pratica 03577c0 · MCP 2124c29 · cerebro-mcp e50bfae · inema-agent-runtime 5cb431b.
+Baseline dos repos de fonte (não alterados), 19/10/2026: webmcp-1-formacao eb037fb · webmcp-2-builder 676c46e · webmcp-3-integrator 1c81fe8 · webmcp-4-agent-developer f4d8c69 · webmcp-5-expert c1ee007 · webmcp-readiness 9ae7d73 · aiv2026 097d98f · astra-computer-use 30ad91a · agi-pratica 03577c0 · MCP 2124c29 · cerebro-mcp e50bfae · ARCKHÉ-agent-runtime 5cb431b.
 
 ## Kit (`kit/`)
 
@@ -67,7 +67,7 @@ Baseline dos repos de fonte (não alterados), 19/10/2026: webmcp-1-formacao eb03
 | 7 | mcp-apps | Ligar uma interface HTML a uma ferramenta com MCP Apps e conferir o vínculo sem abrir um cliente | ferramenta → `_meta.ui.resourceUri` → recurso `ui://` → iframe no host | a7 → `"hasApp":true,"toolName":"ver_turmas"` |
 | 8 | conectar-testar | Ligar o servidor ao Claude Code e ao Codex, rodar a bateria automática e preparar o server.json do Registry | servidor → testes → claude/codex → registry (preview) | `npm test` → `ℹ fail 0`; `claude mcp get turmas` → `Type: stdio`; mapa + gerador |
 
-Quiz: 3–5 perguntas por aula, certa em posições variadas (A/B/C/D) e sem ser a mais longa. Links da aula 8: curso seguinte `https://inematds.github.io/formacao-webmcp-site-v72/`; ameaça a fundo → `formacao-webmcp-seguranca-v72` (aula 5); tríade letal → `loop-r-eng-seguranca-v72`; evals → `loop-r-eng-verificacao-v72`.
+Quiz: 3–5 perguntas por aula, certa em posições variadas (A/B/C/D) e sem ser a mais longa. Links da aula 8: curso seguinte `https://linnoff88-dev.github.io/ ameaça a fundo → `formacao-webmcp-seguranca-v72` (aula 5); tríade letal → `loop-r-eng-seguranca-v72`; evals → `loop-r-eng-verificacao-v72`.
 
 ## Fora deste curso (dono por link)
-WebMCP na página → curso 2 (`formacao-webmcp-site-v72`). Ameaças, prompt injection, tríade letal → curso 4 e LOOP-R. GEO/llms.txt → inemaSEO. Nada de nome de modelo como recomendação.
+WebMCP na página → curso 2 (`formacao-webmcp-site-v72`). Ameaças, prompt injection, tríade letal → curso 4 e LOOP-R. GEO/llms.txt → ARCKHÉSEO. Nada de nome de modelo como recomendação.

@@ -72,7 +72,7 @@
         {
           "rot": "Terminal · install",
           "icone": "terminal",
-          "conteudo": "git clone https://github.com/inematds/formacao-webmcp-mcp-v72 ~/projetos/formacao-webmcp-mcp-v72\ncd ~/projetos/formacao-webmcp-mcp-v72/kit\nnpm ci                      # installs the versions from package-lock.json\nnpm ls --depth=0"
+          "conteudo": "git clone https://github.com/linnoff88-dev/formacao-webmcp-mcp-v72 ~/projetos/formacao-webmcp-mcp-v72\ncd ~/projetos/formacao-webmcp-mcp-v72/kit\nnpm ci                      # installs the versions from package-lock.json\nnpm ls --depth=0"
         }
       ],
       "saida": {

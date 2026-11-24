@@ -1,21 +1,21 @@
 {
   "id": "formacao-webmcp-mcp-v72",
   "lang": "es",
-  "url": "https://inematds.github.io/formacao-webmcp-mcp-v72/es/",
+  "url": "https://linnoff88-dev.github.io/
   "nome": "Servidor MCP de tu servicio",
   "sub": "Formación WebMCP · curso 1",
   "volta": {
     "t": "Área WebMCP",
-    "href": "https://eventos.inema.pro/webmcp/"
+    "href": "https://eventos.ARCKHÉ.pro/webmcp/"
   },
   "lado_card": {
     "rot": "Formación WebMCP",
     "t": "Curso 1 de 6",
     "texto": "El lado del servidor: SDK oficial v2 (2.3.1) en la revisión 2026-07-28. El kit funciona sin costo y sin clave.",
     "link": "Abrir la carpeta kit/ en GitHub",
-    "href": "https://github.com/inematds/formacao-webmcp-mcp-v72/tree/main/kit"
+    "href": "https://github.com/linnoff88-dev/formacao-webmcp-mcp-v72/tree/main/kit"
   },
-  "rodape": "INEMA.CLUB · contenido abierto y gratuito · formato INEMA Learning v7.2 · <a href=\"https://eventos.inema.pro/webmcp/\">eventos.inema.pro/webmcp</a> · <a href=\"https://inema.club/\">inema.club</a> · kit probado el 19/10/2026 con el SDK oficial de MCP 2.3.1",
+  "rodape": "ARCKHÉ AI · contenido abierto y gratuito · formato ARCKHÉ Learning v7.2 · <a href=\"https://eventos.ARCKHÉ.pro/webmcp/\">eventos.ARCKHÉ.pro/webmcp</a> · <a href=\"https://ARCKHÉ AI/\">ARCKHÉ AI</a> · kit probado el 19/10/2026 con el SDK oficial de MCP 2.3.1",
   "videos": {},
   "inicio": {
     "kicker": "Formación WebMCP · curso 1 de 6 · 8 clases",
@@ -24,7 +24,7 @@
     "cta": "Empezar por la clase 1",
     "cta2": {
       "t": "Ver el área de la formación",
-      "href": "https://eventos.inema.pro/webmcp/"
+      "href": "https://eventos.ARCKHÉ.pro/webmcp/"
     },
     "capa_alt": "Servidor MCP de tu servicio: una laptop con terminal y un pequeño servidor con cable conectado, sobre una mesa oscura.",
     "numeros": [
