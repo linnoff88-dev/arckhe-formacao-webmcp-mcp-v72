@@ -3,34 +3,34 @@
   "lang": "pt-BR",
   "url": "https://linnoff88-dev.github.io/
   "nome": "Servidor MCP do seu serviço",
-  "sub": "Formação WebMCP · curso 1",
+  "sub": "Formaçêo WebMCP · curso 1",
   "volta": {
     "t": "Área WebMCP",
     "href": "https://eventos.ARCKHÉ.pro/webmcp/"
   },
   "lado_card": {
-    "rot": "Formação WebMCP",
+    "rot": "Formaçêo WebMCP",
     "t": "Curso 1 de 6",
-    "texto": "O lado do servidor: SDK oficial v2 (2.3.1) na revisão 2026-07-28. O kit roda sem custo e sem chave.",
+    "texto": "O lado do servidor: SDK oficial v2 (2.3.1) na revisêo 2026-07-28. O kit roda sem custo e sem chave.",
     "link": "Abrir a pasta kit/ no GitHub",
     "href": "https://github.com/linnoff88-dev/formacao-webmcp-mcp-v72/tree/main/kit"
   },
   "rodape": "ARCKHÉ AI · conteúdo aberto e gratuito · formato ARCKHÉ Learning v7.2 · <a href=\"https://eventos.ARCKHÉ.pro/webmcp/\">eventos.ARCKHÉ.pro/webmcp</a> · <a href=\"https://ARCKHÉ AI/\">ARCKHÉ AI</a> · kit testado em 19/10/2026 com o SDK oficial do MCP 2.3.1",
   "videos": {},
   "inicio": {
-    "kicker": "Formação WebMCP · curso 1 de 6 · 8 aulas",
-    "titulo": "Servidor MCP do seu serviço, testado e na revisão vigente",
-    "lead": "Ferramentas que o agente chama, com confirmação quando há consequência, token quando é remoto e teste automático no fim. Tudo na revisão 2026-07-28 do MCP, com o SDK oficial (v2, 2.3.1), num kit que roda na sua máquina sem custo e sem chave.",
+    "kicker": "Formaçêo WebMCP · curso 1 de 6 · 8 aulas",
+    "titulo": "Servidor MCP do seu serviço, testado e na revisêo vigente",
+    "lead": "Ferramentas que o agente chama, com confirmaçêo quando há consequência, token quando é remoto e teste automático no fim. Tudo na revisêo 2026-07-28 do MCP, com o SDK oficial (v2, 2.3.1), num kit que roda na sua máquina sem custo e sem chave.",
     "cta": "Começar pela aula 1",
     "cta2": {
-      "t": "Ver a área da formação",
+      "t": "Ver a área da formaçêo",
       "href": "https://eventos.ARCKHÉ.pro/webmcp/"
     },
     "capa_alt": "Servidor MCP do seu serviço: um notebook com terminal e um pequeno servidor com cabo plugado, numa mesa escura.",
     "numeros": [
       {"v": "8", "t": "aulas curtas"},
-      {"v": "2026-07-28", "t": "revisão do MCP ensinada"},
-      {"v": "2.3.1", "t": "versão do SDK oficial no kit"},
+      {"v": "2026-07-28", "t": "revisêo do MCP ensinada"},
+      {"v": "2.3.1", "t": "versêo do SDK oficial no kit"},
       {"v": "0", "t": "chaves de API e custo"}
     ],
     "aulas_titulo": "As aulas",
@@ -38,19 +38,19 @@
     "blocos": [
       {"t": "Para quem é", "itens": [
         "Dev que roda Node e terminal e quer que o seu serviço seja usado por agentes (Claude Code, Codex e outros clientes MCP).",
-        "Quem tem um servidor MCP feito em 2025 com SSE, sessão e initialize e precisa saber o que mudou.",
+        "Quem tem um servidor MCP feito em 2025 com SSE, sessêo e initialize e precisa saber o que mudou.",
         "Quem prefere Python: os conceitos valem igual; o curso usa Node (o SDK Python mcp 2.3.0 contém server/discover no código, sem prática aqui)."
       ]},
       {"t": "O que você sai fazendo", "itens": [
         "Um servidor com ferramenta só de leitura, ferramenta com consequência, recurso e prompt.",
         "O mesmo código por stdio e por Streamable HTTP sem estado, com guarda de Host e Origin.",
-        "Confirmação do usuário no meio da chamada (MRTR) e token com escopo mínimo por ferramenta.",
+        "Confirmaçêo do usuário no meio da chamada (MRTR) e token com escopo mínimo por ferramenta.",
         "Uma interface MCP Apps, a bateria de testes e o servidor ligado ao Claude Code e ao Codex."
       ]},
-      {"t": "Onde este curso entra na Formação WebMCP", "itens": [
+      {"t": "Onde este curso entra na Formaçêo WebMCP", "itens": [
         "Curso 0 mostra como os agentes usam um site; este é o lado do servidor (backend).",
         "Curso 2 leva ferramentas para dentro da página com WebMCP; curso 4 aprofunda as ameaças.",
-        "Ameaças de loop autônomo e evals a fundo ficam na Formação LOOP-R Engenharia."
+        "Ameaças de loop autônomo e evals a fundo ficam na Formaçêo LOOP-R Engenharia."
       ]}
     ]
   },
@@ -68,7 +68,7 @@
     "dg_dica": "Clique em cada bloco do diagrama para ver o que ele faz.",
     "copiar": "Copiar",
     "copiado": "Copiado",
-    "selo_simulacao": "Simulação: exemplo ilustrativo",
+    "selo_simulacao": "Simulaçêo: exemplo ilustrativo",
     "selo_real": "Exemplo do repositório",
     "pronto_quando": "Pronto quando:",
     "fiz": "Fiz este exercício",
@@ -77,8 +77,8 @@
     "de": "de",
     "cert_tag": "competência",
     "correto": "Correto",
-    "errado": "Não é essa",
-    "quiz_aguarda": "Escolha uma alternativa. A explicação aparece depois da sua tentativa.",
+    "errado": "Nêo é essa",
+    "quiz_aguarda": "Escolha uma alternativa. A explicaçêo aparece depois da sua tentativa.",
     "proxima_pergunta": "Próxima pergunta",
     "quiz_ver": "Ver resultado",
     "quiz_fim": "Teste concluído",
@@ -105,7 +105,7 @@
     "baixar_ics": "Baixar para o calendário (.ics)",
     "ind_estudo": "Estudo (aulas)",
     "ind_pratica": "Prática declarada",
-    "ind_nota": "Prática = exercícios que você marcou como feitos. A comprovação vem na prova da certificação.",
+    "ind_nota": "Prática = exercícios que você marcou como feitos. A comprovaçêo vem na prova da certificaçêo.",
     "estudo": {
       "titulo": "Seu estudo",
       "continuar": "Continuar de onde parei",
@@ -118,7 +118,7 @@
       "notas": "Minhas anotações",
       "dados": "Copiar meus dados",
       "sem_testes": "Nenhum teste feito ainda. O teste fica no fim de cada aula.",
-      "nao_fez": "teste ainda não feito",
+      "nao_fez": "teste ainda nêo feito",
       "ultimo": "Último",
       "melhor": "Melhor",
       "tentativas": "tentativas",
@@ -127,21 +127,21 @@
       "rever": "Para rever",
       "resposta": "Resposta certa:",
       "ir_teste": "Refazer o teste",
-      "sem_notas": "Nenhuma anotação ainda. Na aula, selecione um trecho do texto e toque em Marcar ou Anotar.",
+      "sem_notas": "Nenhuma anotaçêo ainda. Na aula, selecione um trecho do texto e toque em Marcar ou Anotar.",
       "so_marcado": "(só marcado)",
       "marcar": "Marcar",
       "anotar": "Anotar",
       "salvar": "Salvar",
       "apagar": "Apagar marca",
       "fechar": "Fechar",
-      "nota_ph": "Escreva sua anotação sobre este trecho…",
+      "nota_ph": "Escreva sua anotaçêo sobre este trecho…",
       "um_bloco": "Marque dentro de um parágrafo só.",
-      "nao_marca": "Este trecho não pode ser marcado.",
-      "dados_exp": "Seu progresso, suas anotações e as notas dos testes ficam só neste navegador. Baixe uma cópia (.json) para guardar ou para continuar em outro computador ou navegador; lá, carregue a cópia. Carregar soma com o que já existe e não apaga nada.",
+      "nao_marca": "Este trecho nêo pode ser marcado.",
+      "dados_exp": "Seu progresso, suas anotações e as notas dos testes ficam só neste navegador. Baixe uma cópia (.json) para guardar ou para continuar em outro computador ou navegador; lá, carregue a cópia. Carregar soma com o que já existe e nêo apaga nada.",
       "exportar": "Baixar cópia",
       "importar": "Carregar cópia",
       "import_ok": "Cópia carregada ({n} itens). Atualizando a página…",
-      "import_erro": "Arquivo não reconhecido. Nada foi alterado.",
+      "import_erro": "Arquivo nêo reconhecido. Nada foi alterado.",
       "import_outro": "Esta cópia é de outro curso. Nada foi alterado.",
       "export_ok": "Cópia baixada."
     },
@@ -153,7 +153,7 @@
     "conv_ruim": "Escolha fraca",
     "conv_fim": "Fim da conversa",
     "conv_placar": "Você fez {p} de {m} pontos possíveis.",
-    "conv_licao": "Lição:",
+    "conv_licao": "Liçêo:",
     "conv_recomecar": "Recomeçar a conversa",
     "conv_feita": "Seu melhor placar: {p} de {m} pontos."
   },

@@ -43,7 +43,7 @@ import * as z from &#x27;zod/v4&#x27;;
 export const TURMAS = [
   { id: &#x27;html-01&#x27;, titulo: &#x27;HTML semântico para agentes&#x27;, vagas: 3 },
   { id: &#x27;mcp-01&#x27;, titulo: &#x27;Servidor MCP em uma tarde&#x27;, vagas: 1 },
-  { id: &#x27;mcp-02&#x27;, titulo: &#x27;MCP com autorização&#x27;, vagas: 0 }
+  { id: &#x27;mcp-02&#x27;, titulo: &#x27;MCP com autorizaçêo&#x27;, vagas: 0 }
 ];
 
 const Turma = z.object({ id: z.string(), titulo: z.string(), vagas: z.int() });
@@ -57,10 +57,10 @@ export function createServer() {
     &#x27;buscar_turmas&#x27;,
     {
       title: &#x27;Buscar turmas&#x27;,
-      description: &#x27;Lista turmas cujo título contém o termo. Só leitura: não reserva nada.&#x27;,
+      description: &#x27;Lista turmas cujo título contém o termo. Só leitura: nêo reserva nada.&#x27;,
       inputSchema: z.object({
         termo: z.string().min(2).describe(&#x27;Parte do título, ex.: &quot;mcp&quot;&#x27;),
-        limite: z.int().min(1).max(20).optional().describe(&#x27;Máximo de turmas (padrão 5)&#x27;)
+        limite: z.int().min(1).max(20).optional().describe(&#x27;Máximo de turmas (padrêo 5)&#x27;)
       }),
       outputSchema: z.object({ turmas: z.array(Turma) }),
       annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false }
@@ -80,7 +80,7 @@ export function createServer() {
     &#x27;reservar_vaga&#x27;,
     {
       title: &#x27;Reservar vaga&#x27;,
-      description: &#x27;Reserva uma vaga na turma para o e-mail informado. Tem consequência: pede confirmação antes.&#x27;,
+      description: &#x27;Reserva uma vaga na turma para o e-mail informado. Tem consequência: pede confirmaçêo antes.&#x27;,
       inputSchema: z.object({
         turma_id: z.string().describe(&#x27;Id da turma, ex.: &quot;mcp-01&quot;&#x27;),
         email: z.email().describe(&#x27;E-mail de quem vai fazer a turma&#x27;)
@@ -91,7 +91,7 @@ export function createServer() {
     },
     async ({ turma_id, email }, ctx) =&gt; {
       const turma = TURMAS.find(x =&gt; x.id === turma_id);
-      if (!turma) return { content: [{ type: &#x27;text&#x27;, text: `turma ${turma_id} não existe` }], isError: true };
+      if (!turma) return { content: [{ type: &#x27;text&#x27;, text: `turma ${turma_id} nêo existe` }], isError: true };
       if (turma.vagas &lt; 1) return { content: [{ type: &#x27;text&#x27;, text: `turma ${turma_id} sem vagas` }], isError: true };
 
       const resposta = inputResponse(ctx.mcpReq.inputResponses, &#x27;confirmar&#x27;);
@@ -140,7 +140,7 @@ import { createServer } from &#x27;./servidor.mjs&#x27;;
 
 serveStdio(createServer);
 console.error(&#x27;turmas: servidor MCP no stdio&#x27;);</pre></div></div></div></section><section class="secao" id="s4"><div class="sec-cab"><div><h2><span class="sn">04</span><span class="sp" aria-hidden="true"> · </span>Llama con el cliente de prueba</h2><p>La prueba hace el papel de Claude Code: inicia node stdio.mjs, negocia la revisión y llama a buscar_turmas.</p></div></div><div class="cods"><div><div class="cod"><div class="cod-cab"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg><b>Terminal · prueba stdio</b><button type="button" class="copiar" data-rot="Copiar" data-ok="Copiado"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copiar</span></button></div><pre>cd ~/projetos/formacao-webmcp-mcp-v72/kit
-node teste-stdio.mjs; echo &quot;saída: $?&quot;</pre></div><div class="cod"><div class="cod-cab"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg><b>Archivo · kit/teste-stdio.mjs</b><button type="button" class="copiar" data-rot="Copiar" data-ok="Copiado"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copiar</span></button></div><pre>// Uso: node teste-stdio.mjs [arquivo do servidor, padrão stdio.mjs]
+node teste-stdio.mjs; echo &quot;saída: $?&quot;</pre></div><div class="cod"><div class="cod-cab"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg><b>Archivo · kit/teste-stdio.mjs</b><button type="button" class="copiar" data-rot="Copiar" data-ok="Copiado"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copiar</span></button></div><pre>// Uso: node teste-stdio.mjs [arquivo do servidor, padrêo stdio.mjs]
 // teste-stdio.mjs — hace el papel del cliente (Claude Code, Codex…): inicia &quot;node stdio.mjs&quot;,
 // negocia la revisión del protocolo y llama a una tool por el stdin/stdout del proceso.
 import { Client } from &#x27;@modelcontextprotocol/client&#x27;;

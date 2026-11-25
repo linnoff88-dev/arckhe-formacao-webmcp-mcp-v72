@@ -21,10 +21,10 @@
   &#x27;buscar_turmas&#x27;,
   {
     title: &#x27;Buscar turmas&#x27;,
-    description: &#x27;Lista turmas cujo título contém o termo. Só leitura: não reserva nada.&#x27;,
+    description: &#x27;Lista turmas cujo título contém o termo. Só leitura: nêo reserva nada.&#x27;,
     inputSchema: z.object({
       termo: z.string().min(2).describe(&#x27;Parte do título, ex.: &quot;mcp&quot;&#x27;),
-      limite: z.int().min(1).max(20).optional().describe(&#x27;Máximo de turmas (padrão 5)&#x27;)
+      limite: z.int().min(1).max(20).optional().describe(&#x27;Máximo de turmas (padrêo 5)&#x27;)
     }),
     outputSchema: z.object({ turmas: z.array(Turma) }),
     annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false }
@@ -34,7 +34,7 @@
   &#x27;reservar_vaga&#x27;,
   {
     title: &#x27;Reservar vaga&#x27;,
-    description: &#x27;Reserva uma vaga na turma para o e-mail informado. Tem consequência: pede confirmação antes.&#x27;,
+    description: &#x27;Reserva uma vaga na turma para o e-mail informado. Tem consequência: pede confirmaçêo antes.&#x27;,
     inputSchema: z.object({
       turma_id: z.string().describe(&#x27;Id da turma, ex.: &quot;mcp-01&quot;&#x27;),
       email: z.email().describe(&#x27;E-mail de quem vai fazer a turma&#x27;)
@@ -59,7 +59,7 @@ const confere = (ok, msg) =&gt; { console.log(`${ok ? &#x27;ok   &#x27; : &#x27;
 
 const { tools } = await cliente.listTools();
 for (const t of tools) {
-  confere(t.description?.length &gt;= 20, `${t.name}: descrição com 20+ caracteres`);
+  confere(t.description?.length &gt;= 20, `${t.name}: descriçêo com 20+ caracteres`);
   confere(typeof t.annotations?.readOnlyHint === &#x27;boolean&#x27;, `${t.name}: diz se é só leitura`);
 }
 const ok = await cliente.callTool({ name: &#x27;buscar_turmas&#x27;, arguments: { termo: &#x27;mcp&#x27;, limite: 1 } });
@@ -70,9 +70,9 @@ confere(ruim.isError === true, `argumento inválido vira isError: ${ruim.content
 console.log(`${falhas} falhas`);
 await cliente.close();
 await handler.close();
-process.exitCode = falhas ? 1 : 0;</pre></div></div><div class="saida"><div class="saida-tabs" role="tablist"><button type="button" data-alvo="s0" aria-selected="true">Captured output (10/19/2026)</button></div><div class="saida-corpo" data-painel="s0"><span class="selo real">Example from the repository</span><pre>ok    buscar_turmas: descrição com 20+ caracteres
+process.exitCode = falhas ? 1 : 0;</pre></div></div><div class="saida"><div class="saida-tabs" role="tablist"><button type="button" data-alvo="s0" aria-selected="true">Captured output (10/19/2026)</button></div><div class="saida-corpo" data-painel="s0"><span class="selo real">Example from the repository</span><pre>ok    buscar_turmas: descriçêo com 20+ caracteres
 ok    buscar_turmas: diz se é só leitura
-ok    reservar_vaga: descrição com 20+ caracteres
+ok    reservar_vaga: descriçêo com 20+ caracteres
 ok    reservar_vaga: diz se é só leitura
 ok    buscar_turmas devolve structuredContent com 1 turma
 ok    argumento inválido vira isError: Input validation error: Invalid arguments for tool buscar_turmas: term…

@@ -19,18 +19,18 @@
     },
     {
       "icone": "chip",
-      "t": "Ferramenta é ação que o modelo escolhe; recurso é dado que o cliente lê; prompt é modelo que a pessoa escolhe"
+      "t": "Ferramenta é açêo que o modelo escolhe; recurso é dado que o cliente lê; prompt é modelo que a pessoa escolhe"
     },
     {
       "icone": "relogio",
-      "t": "A revisão vigente do protocolo é a 2026-07-28, e o que saiu dela"
+      "t": "A revisêo vigente do protocolo é a 2026-07-28, e o que saiu dela"
     },
     {
       "icone": "terminal",
       "t": "Listar as peças do servidor do kit num comando"
     }
   ],
-  "hero_alt": "Vista de cima de uma mesa escura com uma ferramenta, uma pasta e um cartão ligados por cabos a um pequeno hub.",
+  "hero_alt": "Vista de cima de uma mesa escura com uma ferramenta, uma pasta e um cartêo ligados por cabos a um pequeno hub.",
   "secoes": [
     {
       "tipo": "diagrama",
@@ -41,7 +41,7 @@
           "icone": "usuario",
           "titulo": "Host",
           "sub": "app com modelo",
-          "detalhe": "O aplicativo onde o modelo trabalha: Claude Code, Codex, VS Code com agente. É ele que mostra a ferramenta para o modelo e pede a sua aprovação antes de chamar."
+          "detalhe": "O aplicativo onde o modelo trabalha: Claude Code, Codex, VS Code com agente. É ele que mostra a ferramenta para o modelo e pede a sua aprovaçêo antes de chamar."
         },
         {
           "icone": "chat",
@@ -60,7 +60,7 @@
           "titulo": "Servidor",
           "sub": "o seu serviço",
           "forte": true,
-          "detalhe": "O programa que você escreve. Ele não chama modelo nenhum: só anuncia o que sabe fazer e responde às chamadas.",
+          "detalhe": "O programa que você escreve. Ele nêo chama modelo nenhum: só anuncia o que sabe fazer e responde às chamadas.",
           "itens": [
             {
               "t": "Ferramentas",
@@ -80,7 +80,7 @@
           ]
         }
       ],
-      "legenda": "Divisão de controle conforme a documentação do SDK oficial v2 (páginas Tools, Resources e Prompts), lida em 19/10/2026."
+      "legenda": "Divisêo de controle conforme a documentaçêo do SDK oficial v2 (páginas Tools, Resources e Prompts), lida em 19/10/2026."
     },
     {
       "tipo": "passos",
@@ -89,9 +89,9 @@
       "passos": [
         {
           "titulo": "Ferramenta",
-          "sub": "ação",
+          "sub": "açêo",
           "texto": [
-            "Uma função que o modelo decide chamar a partir do nome, da descrição e do esquema de entrada. Pode só ler ou pode mudar algo no mundo.",
+            "Uma funçêo que o modelo decide chamar a partir do nome, da descriçêo e do esquema de entrada. Pode só ler ou pode mudar algo no mundo.",
             "No kit: <code>buscar_turmas</code> (só leitura) e <code>reservar_vaga</code> (tem consequência)."
           ],
           "exemplo": {
@@ -103,7 +103,7 @@
           "titulo": "Recurso",
           "sub": "dado",
           "texto": [
-            "Dado só de leitura, identificado por uma URI, que o cliente lista e anexa como contexto. Quem decide ler é o aplicativo, não o modelo.",
+            "Dado só de leitura, identificado por uma URI, que o cliente lista e anexa como contexto. Quem decide ler é o aplicativo, nêo o modelo.",
             "No kit: <code>turmas://catalogo</code>, o catálogo inteiro em JSON."
           ]
         },
@@ -127,10 +127,10 @@
     },
     {
       "tipo": "texto",
-      "titulo": "Revisão 2026-07-28: o que mudou em uma tela",
+      "titulo": "Revisêo 2026-07-28: o que mudou em uma tela",
       "paragrafos": [
-        "A versão vigente do protocolo é a <b>2026-07-28</b> (página de versionamento do MCP, lida em 19/10/2026). A anterior era a 2025-11-25.",
-        "O que mais muda para quem vem de 2025: não há mais aperto de mão <code>initialize</code> nem sessão (<code>Mcp-Session-Id</code>); cada pedido leva versão e capacidades em <code>_meta</code>; o cliente descobre o servidor com <code>server/discover</code>; e o servidor que precisa perguntar algo ao usuário devolve <code>input_required</code> em vez de abrir um pedido próprio. Roots, Sampling e Logging foram descontinuados.",
+        "A versêo vigente do protocolo é a <b>2026-07-28</b> (página de versionamento do MCP, lida em 19/10/2026). A anterior era a 2025-11-25.",
+        "O que mais muda para quem vem de 2025: nêo há mais aperto de mêo <code>initialize</code> nem sessêo (<code>Mcp-Session-Id</code>); cada pedido leva versêo e capacidades em <code>_meta</code>; o cliente descobre o servidor com <code>server/discover</code>; e o servidor que precisa perguntar algo ao usuário devolve <code>input_required</code> em vez de abrir um pedido próprio. Roots, Sampling e Logging foram descontinuados.",
         "O SDK oficial que implementa isso é a linha v2 (<code>@modelcontextprotocol/server</code> e <code>@modelcontextprotocol/client</code>, 2.3.1, de 05/10/2026). O pacote antigo <code>@modelcontextprotocol/sdk</code> (1.32.1) ainda fala a 2025-11-25: é o que você vai achar na maioria dos tutoriais."
       ]
     },
@@ -155,7 +155,7 @@
         "abas": [
           {
             "rot": "Saída capturada (19/10/2026)",
-            "html": "<pre>era: modern\nferramenta: buscar_turmas · readOnlyHint=true\nferramenta: reservar_vaga · readOnlyHint=false\nrecurso: turmas://catalogo\nprompt: convite_turma\n2 ferramentas · 1 recurso · 1 prompt\nsaída: 0</pre><p><code>era: modern</code> quer dizer que cliente e servidor combinaram a revisão 2026-07-28. Com <code>mode: 'legacy'</code> (o padrão do cliente v2) eles cairiam no <code>initialize</code> de 2025.</p>"
+            "html": "<pre>era: modern\nferramenta: buscar_turmas · readOnlyHint=true\nferramenta: reservar_vaga · readOnlyHint=false\nrecurso: turmas://catalogo\nprompt: convite_turma\n2 ferramentas · 1 recurso · 1 prompt\nsaída: 0</pre><p><code>era: modern</code> quer dizer que cliente e servidor combinaram a revisêo 2026-07-28. Com <code>mode: 'legacy'</code> (o padrêo do cliente v2) eles cairiam no <code>initialize</code> de 2025.</p>"
           }
         ]
       }
@@ -189,7 +189,7 @@
           "p": "Quem decide chamar uma ferramenta MCP?",
           "opcoes": [
             "O servidor, sempre que recebe dados novos de um sistema externo",
-            "O modelo, a partir do nome, da descrição e do esquema",
+            "O modelo, a partir do nome, da descriçêo e do esquema",
             "A pessoa, escolhendo num menu do cliente",
             "O transporte, conforme o tipo de mensagem que passa pelo cano"
           ],
@@ -212,20 +212,20 @@
           "cert": true
         },
         {
-          "p": "O que a revisão 2026-07-28 tirou do protocolo?",
+          "p": "O que a revisêo 2026-07-28 tirou do protocolo?",
           "opcoes": [
-            "O aperto de mão initialize e a sessão",
+            "O aperto de mêo initialize e a sessêo",
             "As ferramentas com esquema de entrada em JSON Schema",
             "O transporte stdio",
             "O formato JSON-RPC das mensagens entre os dois lados"
           ],
           "certa": 0,
-          "explica": "stdio e Streamable HTTP continuam; JSON-RPC também. Saíram initialize, sessão e <code>Mcp-Session-Id</code>; entrou <code>server/discover</code>.",
+          "explica": "stdio e Streamable HTTP continuam; JSON-RPC também. Saíram initialize, sessêo e <code>Mcp-Session-Id</code>; entrou <code>server/discover</code>.",
           "ref": "texto",
           "cert": true
         },
         {
-          "p": "Você instala <code>@modelcontextprotocol/sdk</code> 1.32.1 seguindo um tutorial. Que revisão ele fala?",
+          "p": "Você instala <code>@modelcontextprotocol/sdk</code> 1.32.1 seguindo um tutorial. Que revisêo ele fala?",
           "opcoes": [
             "2026-07-28, a vigente",
             "Qualquer uma, conforme o cliente",
@@ -251,8 +251,8 @@
           "texto": "Ferramenta (modelo escolhe), recurso (cliente lê), prompt (pessoa escolhe)."
         },
         {
-          "t": "Revisão",
-          "texto": "2026-07-28, sem initialize nem sessão; SDK v2 2.3.1 a implementa."
+          "t": "Revisêo",
+          "texto": "2026-07-28, sem initialize nem sessêo; SDK v2 2.3.1 a implementa."
         }
       ]
     },
@@ -261,19 +261,19 @@
       "titulo": "Para ir além",
       "links": [
         {
-          "t": "Versionamento do MCP (revisão vigente)",
+          "t": "Versionamento do MCP (revisêo vigente)",
           "href": "https://modelcontextprotocol.io/specification/versioning"
         },
         {
-          "t": "Changelog da revisão 2026-07-28",
+          "t": "Changelog da revisêo 2026-07-28",
           "href": "https://modelcontextprotocol.io/specification/2026-07-28/changelog"
         },
         {
-          "t": "SDK oficial TypeScript v2: documentação",
+          "t": "SDK oficial TypeScript v2: documentaçêo",
           "href": "https://ts.sdk.modelcontextprotocol.io/v2/"
         },
         {
-          "t": "Curso 0 da formação: como os agentes usam um site",
+          "t": "Curso 0 da formaçêo: como os agentes usam um site",
           "href": "https://linnoff88-dev.github.io/
         }
       ]

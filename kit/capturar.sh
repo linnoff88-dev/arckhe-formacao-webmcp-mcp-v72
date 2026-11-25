@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # capturar.sh — roda cada bloco "Terminal" do curso (kit/blocos/*.sh) e grava a saída em kit/saidas/.
 # É daqui que saem as abas "Saída capturada" das aulas. Sem argumento: todos os blocos locais
-# (sem rede externa e sem mexer na configuração do Claude Code/Codex).
-# Ficam fora e se rodam à mão: a2a-instalar (clone), a8b-claude e a8c-codex (gravam configuração),
+# (sem rede externa e sem mexer na configuraçêo do Claude Code/Codex).
+# Ficam fora e se rodam à mêo: a2a-instalar (clone), a8b-claude e a8c-codex (gravam configuraçêo),
 # a8d-registry (consulta registry.modelcontextprotocol.io).
 # Uso: bash capturar.sh            # blocos locais
 #      bash capturar.sh a3-ferramentas

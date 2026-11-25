@@ -47,7 +47,7 @@
           "icone": "arquivo",
           "titulo": "Fábrica",
           "sub": "createServer",
-          "detalhe": "Uma função que monta um <code>McpServer</code> e registra ferramentas, recurso e prompt. O SDK chama a fábrica quando precisa de uma instância."
+          "detalhe": "Uma funçêo que monta um <code>McpServer</code> e registra ferramentas, recurso e prompt. O SDK chama a fábrica quando precisa de uma instância."
         },
         {
           "icone": "terminal",
@@ -88,12 +88,12 @@
     {
       "tipo": "codigo",
       "titulo": "O servidor de turmas",
-      "sub": "Leia antes de rodar. As duas ferramentas, o recurso e o prompt estão na mesma fábrica; o stdio é só a porta de entrada.",
+      "sub": "Leia antes de rodar. As duas ferramentas, o recurso e o prompt estêo na mesma fábrica; o stdio é só a porta de entrada.",
       "blocos": [
         {
           "rot": "Arquivo · kit/servidor.mjs",
           "icone": "arquivo",
-          "conteudo": "// servidor.mjs — o servidor MCP de exemplo do curso (serviço fictício de turmas).\n// SDK oficial v2 (@modelcontextprotocol/server 2.3.1, de 05/10/2026), que serve a\n// revisão 2026-07-28 do MCP e, pelo mesmo código, clientes da revisão 2025-11-25.\n// Não chama modelo nem serviço pago: os dados ficam na memória do processo.\nimport { McpServer, acceptedContent, inputRequired, inputResponse, requireScopes } from '@modelcontextprotocol/server';\nimport * as z from 'zod/v4';\n\nexport const TURMAS = [\n  { id: 'html-01', titulo: 'HTML semântico para agentes', vagas: 3 },\n  { id: 'mcp-01', titulo: 'Servidor MCP em uma tarde', vagas: 1 },\n  { id: 'mcp-02', titulo: 'MCP com autorização', vagas: 0 }\n];\n\nconst Turma = z.object({ id: z.string(), titulo: z.string(), vagas: z.int() });\nconst Confirma = z.object({ confirmar: z.boolean().meta({ title: 'Confirmar a reserva' }) });\n\nexport function createServer() {\n  const server = new McpServer({ name: 'turmas', version: '1.0.0' });\n\n  // 1) Ferramenta só de leitura: o cliente pode aprovar sem perguntar.\n  server.registerTool(\n    'buscar_turmas',\n    {\n      title: 'Buscar turmas',\n      description: 'Lista turmas cujo título contém o termo. Só leitura: não reserva nada.',\n      inputSchema: z.object({\n        termo: z.string().min(2).describe('Parte do título, ex.: \"mcp\"'),\n        limite: z.int().min(1).max(20).optional().describe('Máximo de turmas (padrão 5)')\n      }),\n      outputSchema: z.object({ turmas: z.array(Turma) }),\n      annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false }\n    },\n    async ({ termo, limite }) => {\n      const t = termo.toLowerCase();\n      const turmas = TURMAS.filter(x => x.titulo.toLowerCase().includes(t)).slice(0, limite ?? 5);\n      return {\n        content: [{ type: 'text', text: turmas.map(x => `${x.id} · ${x.titulo} · ${x.vagas} vagas`).join('\\n') || 'nenhuma turma' }],\n        structuredContent: { turmas }\n      };\n    }\n  );\n\n  // 2) Ferramenta com consequência: pede confirmação ao usuário no meio da chamada (MRTR).\n  server.registerTool(\n    'reservar_vaga',\n    {\n      title: 'Reservar vaga',\n      description: 'Reserva uma vaga na turma para o e-mail informado. Tem consequência: pede confirmação antes.',\n      inputSchema: z.object({\n        turma_id: z.string().describe('Id da turma, ex.: \"mcp-01\"'),\n        email: z.email().describe('E-mail de quem vai fazer a turma')\n      }),\n      annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: false },\n      // Com token (http-auth.mjs), exige o escopo turmas:reservar; sem token (stdio), não se aplica.\n      scopeChallenge: requireScopes('turmas:reservar')\n    },\n    async ({ turma_id, email }, ctx) => {\n      const turma = TURMAS.find(x => x.id === turma_id);\n      if (!turma) return { content: [{ type: 'text', text: `turma ${turma_id} não existe` }], isError: true };\n      if (turma.vagas < 1) return { content: [{ type: 'text', text: `turma ${turma_id} sem vagas` }], isError: true };\n\n      const resposta = inputResponse(ctx.mcpReq.inputResponses, 'confirmar');\n      if (resposta.kind === 'elicit' && resposta.action !== 'accept') {\n        return { content: [{ type: 'text', text: 'reserva cancelada pelo usuário' }], isError: true };\n      }\n      const ok = acceptedContent(ctx.mcpReq.inputResponses, 'confirmar', Confirma);\n      if (ok?.confirmar !== true) {\n        return inputRequired({\n          inputRequests: {\n            confirmar: inputRequired.elicit({ message: `Reservar 1 vaga em \"${turma.titulo}\" para ${email}?`, requestedSchema: Confirma })\n          }\n        });\n      }\n      turma.vagas -= 1;\n      return { content: [{ type: 'text', text: `reservado: ${turma_id} para ${email} (restam ${turma.vagas})` }] };\n    }\n  );\n\n  // 3) Recurso: dado que o cliente lê quando quiser (não é ação).\n  server.registerResource(\n    'catalogo',\n    'turmas://catalogo',\n    { title: 'Catálogo de turmas', description: 'Todas as turmas em JSON', mimeType: 'application/json' },\n    async uri => ({ contents: [{ uri: uri.href, mimeType: 'application/json', text: JSON.stringify(TURMAS) }] })\n  );\n\n  // 4) Prompt: modelo de pedido que o usuário escolhe no cliente.\n  server.registerPrompt(\n    'convite_turma',\n    {\n      title: 'Convite para a turma',\n      description: 'Monta o pedido de um convite curto para uma turma',\n      argsSchema: z.object({ turma_id: z.string() })\n    },\n    async ({ turma_id }) => ({\n      messages: [{ role: 'user', content: { type: 'text', text: `Escreva um convite de 3 linhas para a turma ${turma_id}, usando o recurso turmas://catalogo.` } }]\n    })\n  );\n\n  return server;\n}"
+          "conteudo": "// servidor.mjs — o servidor MCP de exemplo do curso (serviço fictício de turmas).\n// SDK oficial v2 (@modelcontextprotocol/server 2.3.1, de 05/10/2026), que serve a\n// revisêo 2026-07-28 do MCP e, pelo mesmo código, clientes da revisêo 2025-11-25.\n// Nêo chama modelo nem serviço pago: os dados ficam na memória do processo.\nimport { McpServer, acceptedContent, inputRequired, inputResponse, requireScopes } from '@modelcontextprotocol/server';\nimport * as z from 'zod/v4';\n\nexport const TURMAS = [\n  { id: 'html-01', titulo: 'HTML semântico para agentes', vagas: 3 },\n  { id: 'mcp-01', titulo: 'Servidor MCP em uma tarde', vagas: 1 },\n  { id: 'mcp-02', titulo: 'MCP com autorizaçêo', vagas: 0 }\n];\n\nconst Turma = z.object({ id: z.string(), titulo: z.string(), vagas: z.int() });\nconst Confirma = z.object({ confirmar: z.boolean().meta({ title: 'Confirmar a reserva' }) });\n\nexport function createServer() {\n  const server = new McpServer({ name: 'turmas', version: '1.0.0' });\n\n  // 1) Ferramenta só de leitura: o cliente pode aprovar sem perguntar.\n  server.registerTool(\n    'buscar_turmas',\n    {\n      title: 'Buscar turmas',\n      description: 'Lista turmas cujo título contém o termo. Só leitura: nêo reserva nada.',\n      inputSchema: z.object({\n        termo: z.string().min(2).describe('Parte do título, ex.: \"mcp\"'),\n        limite: z.int().min(1).max(20).optional().describe('Máximo de turmas (padrêo 5)')\n      }),\n      outputSchema: z.object({ turmas: z.array(Turma) }),\n      annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false }\n    },\n    async ({ termo, limite }) => {\n      const t = termo.toLowerCase();\n      const turmas = TURMAS.filter(x => x.titulo.toLowerCase().includes(t)).slice(0, limite ?? 5);\n      return {\n        content: [{ type: 'text', text: turmas.map(x => `${x.id} · ${x.titulo} · ${x.vagas} vagas`).join('\\n') || 'nenhuma turma' }],\n        structuredContent: { turmas }\n      };\n    }\n  );\n\n  // 2) Ferramenta com consequência: pede confirmaçêo ao usuário no meio da chamada (MRTR).\n  server.registerTool(\n    'reservar_vaga',\n    {\n      title: 'Reservar vaga',\n      description: 'Reserva uma vaga na turma para o e-mail informado. Tem consequência: pede confirmaçêo antes.',\n      inputSchema: z.object({\n        turma_id: z.string().describe('Id da turma, ex.: \"mcp-01\"'),\n        email: z.email().describe('E-mail de quem vai fazer a turma')\n      }),\n      annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: false },\n      // Com token (http-auth.mjs), exige o escopo turmas:reservar; sem token (stdio), nêo se aplica.\n      scopeChallenge: requireScopes('turmas:reservar')\n    },\n    async ({ turma_id, email }, ctx) => {\n      const turma = TURMAS.find(x => x.id === turma_id);\n      if (!turma) return { content: [{ type: 'text', text: `turma ${turma_id} nêo existe` }], isError: true };\n      if (turma.vagas < 1) return { content: [{ type: 'text', text: `turma ${turma_id} sem vagas` }], isError: true };\n\n      const resposta = inputResponse(ctx.mcpReq.inputResponses, 'confirmar');\n      if (resposta.kind === 'elicit' && resposta.action !== 'accept') {\n        return { content: [{ type: 'text', text: 'reserva cancelada pelo usuário' }], isError: true };\n      }\n      const ok = acceptedContent(ctx.mcpReq.inputResponses, 'confirmar', Confirma);\n      if (ok?.confirmar !== true) {\n        return inputRequired({\n          inputRequests: {\n            confirmar: inputRequired.elicit({ message: `Reservar 1 vaga em \"${turma.titulo}\" para ${email}?`, requestedSchema: Confirma })\n          }\n        });\n      }\n      turma.vagas -= 1;\n      return { content: [{ type: 'text', text: `reservado: ${turma_id} para ${email} (restam ${turma.vagas})` }] };\n    }\n  );\n\n  // 3) Recurso: dado que o cliente lê quando quiser (nêo é açêo).\n  server.registerResource(\n    'catalogo',\n    'turmas://catalogo',\n    { title: 'Catálogo de turmas', description: 'Todas as turmas em JSON', mimeType: 'application/json' },\n    async uri => ({ contents: [{ uri: uri.href, mimeType: 'application/json', text: JSON.stringify(TURMAS) }] })\n  );\n\n  // 4) Prompt: modelo de pedido que o usuário escolhe no cliente.\n  server.registerPrompt(\n    'convite_turma',\n    {\n      title: 'Convite para a turma',\n      description: 'Monta o pedido de um convite curto para uma turma',\n      argsSchema: z.object({ turma_id: z.string() })\n    },\n    async ({ turma_id }) => ({\n      messages: [{ role: 'user', content: { type: 'text', text: `Escreva um convite de 3 linhas para a turma ${turma_id}, usando o recurso turmas://catalogo.` } }]\n    })\n  );\n\n  return server;\n}"
         },
         {
           "rot": "Arquivo · kit/stdio.mjs",
@@ -105,7 +105,7 @@
     {
       "tipo": "codigo",
       "titulo": "Chame pelo cliente de teste",
-      "sub": "O teste faz o papel do Claude Code: inicia node stdio.mjs, negocia a revisão e chama buscar_turmas.",
+      "sub": "O teste faz o papel do Claude Code: inicia node stdio.mjs, negocia a revisêo e chama buscar_turmas.",
       "blocos": [
         {
           "rot": "Terminal · teste stdio",
@@ -115,7 +115,7 @@
         {
           "rot": "Arquivo · kit/teste-stdio.mjs",
           "icone": "arquivo",
-          "conteudo": "// Uso: node teste-stdio.mjs [arquivo do servidor, padrão stdio.mjs]\n// teste-stdio.mjs — faz o papel do cliente (Claude Code, Codex…): inicia \"node stdio.mjs\",\n// negocia a revisão do protocolo e chama uma ferramenta pelo stdin/stdout do processo.\nimport { Client } from '@modelcontextprotocol/client';\nimport { StdioClientTransport } from '@modelcontextprotocol/client/stdio';\n\nconst cliente = new Client({ name: 'teste-stdio', version: '1.0.0' }, { versionNegotiation: { mode: 'auto' } });\nawait cliente.connect(new StdioClientTransport({ command: 'node', args: [process.argv[2] ?? 'stdio.mjs'] }));\nconst { tools } = await cliente.listTools();\nconst r = await cliente.callTool({ name: 'buscar_turmas', arguments: { termo: 'mcp' } });\nconsole.log(`era: ${cliente.getProtocolEra()} · ferramentas: ${tools.map(t => t.name).join(', ')}`);\nconsole.log(`buscar_turmas → ${r.structuredContent.turmas.length} turmas`);\nawait cliente.close();"
+          "conteudo": "// Uso: node teste-stdio.mjs [arquivo do servidor, padrêo stdio.mjs]\n// teste-stdio.mjs — faz o papel do cliente (Claude Code, Codex…): inicia \"node stdio.mjs\",\n// negocia a revisêo do protocolo e chama uma ferramenta pelo stdin/stdout do processo.\nimport { Client } from '@modelcontextprotocol/client';\nimport { StdioClientTransport } from '@modelcontextprotocol/client/stdio';\n\nconst cliente = new Client({ name: 'teste-stdio', version: '1.0.0' }, { versionNegotiation: { mode: 'auto' } });\nawait cliente.connect(new StdioClientTransport({ command: 'node', args: [process.argv[2] ?? 'stdio.mjs'] }));\nconst { tools } = await cliente.listTools();\nconst r = await cliente.callTool({ name: 'buscar_turmas', arguments: { termo: 'mcp' } });\nconsole.log(`era: ${cliente.getProtocolEra()} · ferramentas: ${tools.map(t => t.name).join(', ')}`);\nconsole.log(`buscar_turmas → ${r.structuredContent.turmas.length} turmas`);\nawait cliente.close();"
         },
         {
           "rot": "Terminal · erro comum (sem npm ci)",
@@ -132,7 +132,7 @@
           },
           {
             "rot": "Erro comum: esqueceu o npm ci",
-            "html": "<pre>ERR_MODULE_NOT_FOUND\nsaída: 1</pre><p>Capturado com o bloco \"erro comum\" acima, que copia os arquivos para uma pasta vazia, sem <code>node_modules</code>. Solução: <code>npm ci</code> dentro de <code>kit/</code>.</p>"
+            "html": "<pre>ERR_MODULE_NOT_FOUND\nsaída: 1</pre><p>Capturado com o bloco \"erro comum\" acima, que copia os arquivos para uma pasta vazia, sem <code>node_modules</code>. Soluçêo: <code>npm ci</code> dentro de <code>kit/</code>.</p>"
           }
         ]
       }
@@ -140,7 +140,7 @@
     {
       "tipo": "codigo",
       "titulo": "Chame pelo MCP Inspector, sem abrir navegador",
-      "sub": "O Inspector 2.11.0 tem modo linha de comando. Versão fixada no npx para o resultado ser o mesmo da captura.",
+      "sub": "O Inspector 2.11.0 tem modo linha de comando. Versêo fixada no npx para o resultado ser o mesmo da captura.",
       "blocos": [
         {
           "rot": "Terminal · Inspector --cli",
@@ -162,9 +162,9 @@
       "tipo": "texto",
       "titulo": "stdout é do protocolo",
       "paragrafos": [
-        "No stdio, cada linha do stdout é lida como mensagem JSON-RPC. Por isso o kit loga com <code>console.error</code> (stderr). A documentação do SDK avisa que um <code>console.log</code> estraga o canal e o host pode derrubar a conexão.",
-        "No nosso teste de 19/10/2026, o cliente do SDK 2.3.1 e o Inspector 2.11.0 pularam uma linha suja e seguiram. Não conte com isso: outro host pode não perdoar. Log sempre no stderr.",
-        "Prefere Python? O pacote do SDK oficial <code>mcp</code> 2.3.0 (PyPI, baixado em 19/10/2026) contém <code>server/discover</code> e <code>InputRequiredResult</code> no código; confira as notas de versão do python-sdk antes de usar. Este curso segue em Node; os conceitos valem igual."
+        "No stdio, cada linha do stdout é lida como mensagem JSON-RPC. Por isso o kit loga com <code>console.error</code> (stderr). A documentaçêo do SDK avisa que um <code>console.log</code> estraga o canal e o host pode derrubar a conexêo.",
+        "No nosso teste de 19/10/2026, o cliente do SDK 2.3.1 e o Inspector 2.11.0 pularam uma linha suja e seguiram. Nêo conte com isso: outro host pode nêo perdoar. Log sempre no stderr.",
+        "Prefere Python? O pacote do SDK oficial <code>mcp</code> 2.3.0 (PyPI, baixado em 19/10/2026) contém <code>server/discover</code> e <code>InputRequiredResult</code> no código; confira as notas de versêo do python-sdk antes de usar. Este curso segue em Node; os conceitos valem igual."
       ]
     },
     {
@@ -217,11 +217,11 @@
           "opcoes": [
             "Instala exatamente as versões do package-lock.json",
             "É mais rápido em qualquer caso, sem nenhuma outra diferença prática",
-            "Baixa sempre a versão mais nova publicada do SDK oficial",
+            "Baixa sempre a versêo mais nova publicada do SDK oficial",
             "Dispensa o package.json"
           ],
           "certa": 0,
-          "explica": "O curso foi testado com 2.3.1; <code>npm ci</code> garante essas versões. <code>npm install</code> pode subir para uma versão que se comporta diferente.",
+          "explica": "O curso foi testado com 2.3.1; <code>npm ci</code> garante essas versões. <code>npm install</code> pode subir para uma versêo que se comporta diferente.",
           "ref": "codigo",
           "cert": true
         },
@@ -230,11 +230,11 @@
           "opcoes": [
             "No stdout, junto das respostas",
             "Num arquivo dentro de node_modules",
-            "Em lugar nenhum: stdio não aceita log",
+            "Em lugar nenhum: stdio nêo aceita log",
             "No stderr, com console.error"
           ],
           "certa": 3,
-          "explica": "stdout é o canal do protocolo. Mesmo que um cliente tolere uma linha suja, outro pode derrubar a conexão.",
+          "explica": "stdout é o canal do protocolo. Mesmo que um cliente tolere uma linha suja, outro pode derrubar a conexêo.",
           "ref": "texto",
           "cert": true
         },
@@ -242,8 +242,8 @@
           "p": "O teste mostra <code>era: modern</code>. O que isso garante?",
           "opcoes": [
             "Que o servidor só aceita clientes novos e recusa os antigos",
-            "Que cliente e servidor combinaram a revisão 2026-07-28",
-            "Que o Node está na versão mais nova",
+            "Que cliente e servidor combinaram a revisêo 2026-07-28",
+            "Que o Node está na versêo mais nova",
             "Que o servidor passou a responder pelo transporte SSE"
           ],
           "certa": 1,
@@ -257,7 +257,7 @@
       "titulo": "Em três frases",
       "itens": [
         {
-          "t": "Versão",
+          "t": "Versêo",
           "texto": "npm ci com o lock do kit: SDK v2 2.3.1."
         },
         {

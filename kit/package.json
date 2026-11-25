@@ -2,7 +2,7 @@
   "name": "kit-servidor-mcp",
   "version": "1.0.0",
   "private": true,
-  "description": "Kit do curso Servidor MCP do seu serviço (Formação WebMCP, ARCKHÉ AI). Versões fixadas em 19/10/2026.",
+  "description": "Kit do curso Servidor MCP do seu serviço (Formaçêo WebMCP, ARCKHÉ AI). Versões fixadas em 19/10/2026.",
   "type": "module",
   "scripts": {
     "stdio": "node stdio.mjs",

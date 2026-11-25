@@ -42,13 +42,13 @@
           "titulo": "Testes",
           "sub": "npm test",
           "forte": true,
-          "detalhe": "Sete testes sem porta, sem modelo e sem custo. Rode antes de cada commit: se a revisão do protocolo ou o SDK mudar, é aqui que você descobre."
+          "detalhe": "Sete testes sem porta, sem modelo e sem custo. Rode antes de cada commit: se a revisêo do protocolo ou o SDK mudar, é aqui que você descobre."
         },
         {
           "icone": "terminal",
           "titulo": "Claude Code",
           "sub": "claude mcp add",
-          "detalhe": "Registra o comando que inicia o servidor. Escopo de projeto grava <code>.mcp.json</code> na pasta e pede aprovação na primeira vez que você abre o <code>claude</code> ali."
+          "detalhe": "Registra o comando que inicia o servidor. Escopo de projeto grava <code>.mcp.json</code> na pasta e pede aprovaçêo na primeira vez que você abre o <code>claude</code> ali."
         },
         {
           "icone": "terminal",
@@ -77,7 +77,7 @@
         {
           "rot": "Arquivo · kit/teste.mjs",
           "icone": "arquivo",
-          "conteudo": "// teste.mjs — bateria automática do servidor de turmas (node --test teste.mjs).\n// Roda sem porta, sem modelo e sem custo: o cliente oficial fala com o handler no mesmo processo.\nimport { test, after } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { Client, StreamableHTTPClientTransport } from '@modelcontextprotocol/client';\nimport { StdioClientTransport } from '@modelcontextprotocol/client/stdio';\nimport { createMcpHandler } from '@modelcontextprotocol/server';\nimport { createServer, TURMAS } from './servidor.mjs';\n\nconst handler = createMcpHandler(createServer);\nafter(() => handler.close());\n\nasync function cliente(modo = 'auto', responde = null) {\n  const c = new Client({ name: 'teste', version: '1.0.0' },\n    { versionNegotiation: { mode: modo }, capabilities: { elicitation: { form: {} } } });\n  if (responde) c.setRequestHandler('elicitation/create', async () => responde);\n  await c.connect(new StreamableHTTPClientTransport(new URL('http://teste.local/mcp'),\n    { fetch: (url, init) => handler.fetch(new Request(url, init)) }));\n  return c;\n}\n\ntest('cliente novo negocia a revisão 2026-07-28 (era modern)', async () => {\n  const c = await cliente('auto');\n  assert.equal(c.getProtocolEra(), 'modern');\n  await c.close();\n});\n\ntest('cliente antigo (initialize, 2025-11-25) ainda é atendido', async () => {\n  const c = await cliente('legacy');\n  assert.equal(c.getProtocolEra(), 'legacy');\n  const { tools } = await c.listTools();\n  assert.ok(tools.some(t => t.name === 'buscar_turmas'));\n  await c.close();\n});\n\ntest('buscar_turmas é só leitura e devolve dado estruturado', async () => {\n  const c = await cliente();\n  const { tools } = await c.listTools();\n  assert.equal(tools.find(t => t.name === 'buscar_turmas').annotations.readOnlyHint, true);\n  const r = await c.callTool({ name: 'buscar_turmas', arguments: { termo: 'html' } });\n  assert.deepEqual(r.structuredContent.turmas.map(t => t.id), ['html-01']);\n  await c.close();\n});\n\ntest('argumento inválido volta como isError, sem rodar o handler', async () => {\n  const c = await cliente();\n  const r = await c.callTool({ name: 'buscar_turmas', arguments: { termo: 'x' } });\n  assert.equal(r.isError, true);\n  await c.close();\n});\n\ntest('reservar_vaga só reserva depois da confirmação (MRTR)', async () => {\n  const antes = TURMAS.find(t => t.id === 'mcp-01').vagas;\n  const recusa = await cliente('auto', { action: 'decline' });\n  const r1 = await recusa.callTool({ name: 'reservar_vaga', arguments: { turma_id: 'mcp-01', email: 'a@exemplo.com' } });\n  assert.equal(r1.isError, true);\n  assert.equal(TURMAS.find(t => t.id === 'mcp-01').vagas, antes);\n  await recusa.close();\n  const aceita = await cliente('auto', { action: 'accept', content: { confirmar: true } });\n  const r2 = await aceita.callTool({ name: 'reservar_vaga', arguments: { turma_id: 'mcp-01', email: 'a@exemplo.com' } });\n  assert.equal(r2.isError, undefined);\n  assert.equal(TURMAS.find(t => t.id === 'mcp-01').vagas, antes - 1);\n  await aceita.close();\n});\n\ntest('turma sem vaga é recusada com isError', async () => {\n  const c = await cliente('auto', { action: 'accept', content: { confirmar: true } });\n  const r = await c.callTool({ name: 'reservar_vaga', arguments: { turma_id: 'mcp-02', email: 'a@exemplo.com' } });\n  assert.equal(r.isError, true);\n  await c.close();\n});\n\ntest('o processo stdio sobe e lista as ferramentas', async () => {\n  const c = new Client({ name: 'teste-stdio', version: '1.0.0' }, { versionNegotiation: { mode: 'auto' } });\n  await c.connect(new StdioClientTransport({ command: process.execPath, args: [new URL('./stdio.mjs', import.meta.url).pathname] }));\n  const { tools } = await c.listTools();\n  assert.deepEqual(tools.map(t => t.name).sort(), ['buscar_turmas', 'reservar_vaga']);\n  await c.close();\n});"
+          "conteudo": "// teste.mjs — bateria automática do servidor de turmas (node --test teste.mjs).\n// Roda sem porta, sem modelo e sem custo: o cliente oficial fala com o handler no mesmo processo.\nimport { test, after } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { Client, StreamableHTTPClientTransport } from '@modelcontextprotocol/client';\nimport { StdioClientTransport } from '@modelcontextprotocol/client/stdio';\nimport { createMcpHandler } from '@modelcontextprotocol/server';\nimport { createServer, TURMAS } from './servidor.mjs';\n\nconst handler = createMcpHandler(createServer);\nafter(() => handler.close());\n\nasync function cliente(modo = 'auto', responde = null) {\n  const c = new Client({ name: 'teste', version: '1.0.0' },\n    { versionNegotiation: { mode: modo }, capabilities: { elicitation: { form: {} } } });\n  if (responde) c.setRequestHandler('elicitation/create', async () => responde);\n  await c.connect(new StreamableHTTPClientTransport(new URL('http://teste.local/mcp'),\n    { fetch: (url, init) => handler.fetch(new Request(url, init)) }));\n  return c;\n}\n\ntest('cliente novo negocia a revisêo 2026-07-28 (era modern)', async () => {\n  const c = await cliente('auto');\n  assert.equal(c.getProtocolEra(), 'modern');\n  await c.close();\n});\n\ntest('cliente antigo (initialize, 2025-11-25) ainda é atendido', async () => {\n  const c = await cliente('legacy');\n  assert.equal(c.getProtocolEra(), 'legacy');\n  const { tools } = await c.listTools();\n  assert.ok(tools.some(t => t.name === 'buscar_turmas'));\n  await c.close();\n});\n\ntest('buscar_turmas é só leitura e devolve dado estruturado', async () => {\n  const c = await cliente();\n  const { tools } = await c.listTools();\n  assert.equal(tools.find(t => t.name === 'buscar_turmas').annotations.readOnlyHint, true);\n  const r = await c.callTool({ name: 'buscar_turmas', arguments: { termo: 'html' } });\n  assert.deepEqual(r.structuredContent.turmas.map(t => t.id), ['html-01']);\n  await c.close();\n});\n\ntest('argumento inválido volta como isError, sem rodar o handler', async () => {\n  const c = await cliente();\n  const r = await c.callTool({ name: 'buscar_turmas', arguments: { termo: 'x' } });\n  assert.equal(r.isError, true);\n  await c.close();\n});\n\ntest('reservar_vaga só reserva depois da confirmaçêo (MRTR)', async () => {\n  const antes = TURMAS.find(t => t.id === 'mcp-01').vagas;\n  const recusa = await cliente('auto', { action: 'decline' });\n  const r1 = await recusa.callTool({ name: 'reservar_vaga', arguments: { turma_id: 'mcp-01', email: 'a@exemplo.com' } });\n  assert.equal(r1.isError, true);\n  assert.equal(TURMAS.find(t => t.id === 'mcp-01').vagas, antes);\n  await recusa.close();\n  const aceita = await cliente('auto', { action: 'accept', content: { confirmar: true } });\n  const r2 = await aceita.callTool({ name: 'reservar_vaga', arguments: { turma_id: 'mcp-01', email: 'a@exemplo.com' } });\n  assert.equal(r2.isError, undefined);\n  assert.equal(TURMAS.find(t => t.id === 'mcp-01').vagas, antes - 1);\n  await aceita.close();\n});\n\ntest('turma sem vaga é recusada com isError', async () => {\n  const c = await cliente('auto', { action: 'accept', content: { confirmar: true } });\n  const r = await c.callTool({ name: 'reservar_vaga', arguments: { turma_id: 'mcp-02', email: 'a@exemplo.com' } });\n  assert.equal(r.isError, true);\n  await c.close();\n});\n\ntest('o processo stdio sobe e lista as ferramentas', async () => {\n  const c = new Client({ name: 'teste-stdio', version: '1.0.0' }, { versionNegotiation: { mode: 'auto' } });\n  await c.connect(new StdioClientTransport({ command: process.execPath, args: [new URL('./stdio.mjs', import.meta.url).pathname] }));\n  const { tools } = await c.listTools();\n  assert.deepEqual(tools.map(t => t.name).sort(), ['buscar_turmas', 'reservar_vaga']);\n  await c.close();\n});"
         }
       ],
       "saida": {
@@ -85,7 +85,7 @@
         "abas": [
           {
             "rot": "Saída capturada (19/10/2026)",
-            "html": "<pre>✔ cliente novo negocia a revisão 2026-07-28 (era modern) (43.097669ms)\n✔ cliente antigo (initialize, 2025-11-25) ainda é atendido (37.721172ms)\n✔ buscar_turmas é só leitura e devolve dado estruturado (20.015635ms)\n✔ argumento inválido volta como isError, sem rodar o handler (3.965184ms)\n✔ reservar_vaga só reserva depois da confirmação (MRTR) (15.684146ms)\n✔ turma sem vaga é recusada com isError (2.665568ms)\n✔ o processo stdio sobe e lista as ferramentas (243.920508ms)\nℹ tests 7\nℹ pass 7\nℹ fail 0\nsaída: 0</pre><p>Os tempos mudam a cada rodada; o que importa é <code>ℹ fail 0</code>. Teste da revisão nova usa <code>handler.fetch</code>: o par em memória (<code>InMemoryTransport</code>) só conecta a era 2025.</p>"
+            "html": "<pre>✔ cliente novo negocia a revisêo 2026-07-28 (era modern) (43.097669ms)\n✔ cliente antigo (initialize, 2025-11-25) ainda é atendido (37.721172ms)\n✔ buscar_turmas é só leitura e devolve dado estruturado (20.015635ms)\n✔ argumento inválido volta como isError, sem rodar o handler (3.965184ms)\n✔ reservar_vaga só reserva depois da confirmaçêo (MRTR) (15.684146ms)\n✔ turma sem vaga é recusada com isError (2.665568ms)\n✔ o processo stdio sobe e lista as ferramentas (243.920508ms)\nℹ tests 7\nℹ pass 7\nℹ fail 0\nsaída: 0</pre><p>Os tempos mudam a cada rodada; o que importa é <code>ℹ fail 0</code>. Teste da revisêo nova usa <code>handler.fetch</code>: o par em memória (<code>InMemoryTransport</code>) só conecta a era 2025.</p>"
           }
         ]
       }
@@ -93,7 +93,7 @@
     {
       "tipo": "codigo",
       "titulo": "Ligue ao Claude Code e ao Codex",
-      "sub": "Comandos locais: não chamam modelo. Rode na pasta do kit (ou na do seu servidor).",
+      "sub": "Comandos locais: nêo chamam modelo. Rode na pasta do kit (ou na do seu servidor).",
       "blocos": [
         {
           "rot": "Terminal · Claude Code",
@@ -111,11 +111,11 @@
         "abas": [
           {
             "rot": "Claude Code (19/10/2026)",
-            "html": "<pre>Added stdio MCP server turmas with command: node /home/nmaldaner/projetos/formacao-webmcp-mcp-v72/kit/stdio.mjs to project config\nFile modified: /home/nmaldaner/projetos/formacao-webmcp-mcp-v72/kit/.mcp.json\nturmas:\n  Scope: Project config (shared via .mcp.json)\n  Status: ⏸ Pending approval (run `claude` to approve)\n  Type: stdio\n  Command: node\n  Args: /home/nmaldaner/projetos/formacao-webmcp-mcp-v72/kit/stdio.mjs\n  Environment:\n\nTo remove this server, run: claude mcp remove turmas -s project</pre><p>Rode <code>claude</code> uma vez nessa pasta e aprove o servidor <code>turmas</code>. Depois, <code>claude mcp list</code> deve mostrar a linha do servidor terminando em <code>✔ Connected</code> (formato visto em outros servidores; esta aprovação não foi capturada).</p>"
+            "html": "<pre>Added stdio MCP server turmas with command: node /home/nmaldaner/projetos/formacao-webmcp-mcp-v72/kit/stdio.mjs to project config\nFile modified: /home/nmaldaner/projetos/formacao-webmcp-mcp-v72/kit/.mcp.json\nturmas:\n  Scope: Project config (shared via .mcp.json)\n  Status: ⏸ Pending approval (run `claude` to approve)\n  Type: stdio\n  Command: node\n  Args: /home/nmaldaner/projetos/formacao-webmcp-mcp-v72/kit/stdio.mjs\n  Environment:\n\nTo remove this server, run: claude mcp remove turmas -s project</pre><p>Rode <code>claude</code> uma vez nessa pasta e aprove o servidor <code>turmas</code>. Depois, <code>claude mcp list</code> deve mostrar a linha do servidor terminando em <code>✔ Connected</code> (formato visto em outros servidores; esta aprovaçêo nêo foi capturada).</p>"
           },
           {
             "rot": "Codex (19/10/2026)",
-            "html": "<pre>Added global MCP server 'turmas'.\nName    Command  Args                                                            Env  Cwd  Status   Auth       \nturmas  node     /home/nmaldaner/projetos/formacao-webmcp-mcp-v72/kit/stdio.mjs  -    -    enabled  Unsupported</pre><p>O comando gravou no <code>config.toml</code> do Codex um bloco <code>[mcp_servers.turmas]</code> com <code>command = \"node\"</code> e o caminho do <code>stdio.mjs</code>. Captura feita com uma pasta de configuração separada (CODEX_HOME), para não mexer na configuração do autor.</p>"
+            "html": "<pre>Added global MCP server 'turmas'.\nName    Command  Args                                                            Env  Cwd  Status   Auth       \nturmas  node     /home/nmaldaner/projetos/formacao-webmcp-mcp-v72/kit/stdio.mjs  -    -    enabled  Unsupported</pre><p>O comando gravou no <code>config.toml</code> do Codex um bloco <code>[mcp_servers.turmas]</code> com <code>command = \"node\"</code> e o caminho do <code>stdio.mjs</code>. Captura feita com uma pasta de configuraçêo separada (CODEX_HOME), para nêo mexer na configuraçêo do autor.</p>"
           }
         ]
       }
@@ -123,7 +123,7 @@
     {
       "tipo": "simconversa",
       "titulo": "O agente vai reservar uma vaga",
-      "sub": "Simulação: você está no Claude Code com o servidor de turmas ligado. Escolha a resposta.",
+      "sub": "Simulaçêo: você está no Claude Code com o servidor de turmas ligado. Escolha a resposta.",
       "personagem": {
         "nome": "Agente",
         "papel": "Claude Code com o servidor turmas"
@@ -131,16 +131,16 @@
       "inicio": "pedido",
       "falas": {
         "pedido": {
-          "cliente": "Achei a turma html-01 com 3 vagas. Quer que eu chame reservar_vaga para aluno@exemplo.com? A ferramenta tem consequência e vai pedir confirmação.",
+          "cliente": "Achei a turma html-01 com 3 vagas. Quer que eu chame reservar_vaga para aluno@exemplo.com? A ferramenta tem consequência e vai pedir confirmaçêo.",
           "opcoes": [
             {
-              "t": "Pode chamar. Quando a confirmação aparecer, eu respondo.",
+              "t": "Pode chamar. Quando a confirmaçêo aparecer, eu respondo.",
               "vai": "confirma",
               "nota": 2,
               "comenta": "Isso. A ferramenta pede o sim no meio da chamada (MRTR) e você decide na hora, vendo turma e e-mail."
             },
             {
-              "t": "Aprova sempre essa ferramenta, para não me perguntar mais.",
+              "t": "Aprova sempre essa ferramenta, para nêo me perguntar mais.",
               "vai": "sempre",
               "nota": 0,
               "comenta": "Aprovar para sempre uma ferramenta com consequência tira o humano justamente onde ele importa."
@@ -149,7 +149,7 @@
               "t": "Antes, busca de novo para eu ver as vagas atualizadas.",
               "vai": "busca",
               "nota": 1,
-              "comenta": "Não faz mal (buscar é só leitura), mas a vaga é conferida dentro de reservar_vaga de qualquer jeito."
+              "comenta": "Nêo faz mal (buscar é só leitura), mas a vaga é conferida dentro de reservar_vaga de qualquer jeito."
             }
           ]
         },
@@ -163,7 +163,7 @@
               "comenta": "Ok, você chegou ao mesmo ponto com uma chamada a mais."
             },
             {
-              "t": "Não, deixa para depois.",
+              "t": "Nêo, deixa para depois.",
               "vai": "fim-adiado",
               "nota": 0,
               "comenta": "Tudo bem: nada foi reservado."
@@ -177,13 +177,13 @@
               "t": "Sim, é isso mesmo.",
               "vai": "fim-ok",
               "nota": 2,
-              "comenta": "Confirmação consciente: turma e e-mail estão na pergunta."
+              "comenta": "Confirmaçêo consciente: turma e e-mail estêo na pergunta."
             },
             {
-              "t": "Não, o e-mail está errado.",
+              "t": "Nêo, o e-mail está errado.",
               "vai": "fim-recusa",
               "nota": 2,
-              "comenta": "Ótimo uso do não: a ferramenta devolve isError e nada muda."
+              "comenta": "Ótimo uso do nêo: a ferramenta devolve isError e nada muda."
             }
           ]
         },
@@ -191,28 +191,28 @@
           "cliente": "Certo. Posso também aprovar sozinho as próximas reservas, sem perguntar?",
           "opcoes": [
             {
-              "t": "Não. Reserva sempre passa por mim.",
+              "t": "Nêo. Reserva sempre passa por mim.",
               "vai": "confirma",
               "nota": 1,
-              "comenta": "Você corrigiu a rota: consequência volta a pedir confirmação."
+              "comenta": "Você corrigiu a rota: consequência volta a pedir confirmaçêo."
             },
             {
               "t": "Pode, é mais rápido.",
               "vai": "fim-risco",
               "nota": 0,
-              "comenta": "Rápido e sem freio: uma descrição enganosa ou um pedido mal entendido vira reserva real."
+              "comenta": "Rápido e sem freio: uma descriçêo enganosa ou um pedido mal entendido vira reserva real."
             }
           ]
         },
         "fim-ok": {
           "fim": true,
           "titulo": "Reservado com o seu sim",
-          "texto": "A ferramenta só agiu depois da sua confirmação, com turma e e-mail na pergunta."
+          "texto": "A ferramenta só agiu depois da sua confirmaçêo, com turma e e-mail na pergunta."
         },
         "fim-recusa": {
           "fim": true,
           "titulo": "Recusado sem efeito",
-          "texto": "O não virou isError e a vaga continua lá. É o caminho que o teste da aula 5 confere."
+          "texto": "O nêo virou isError e a vaga continua lá. É o caminho que o teste da aula 5 confere."
         },
         "fim-adiado": {
           "fim": true,
@@ -222,7 +222,7 @@
         "fim-risco": {
           "fim": true,
           "titulo": "Sem humano na consequência",
-          "texto": "Aprovação permanente em ferramenta com consequência é o que o curso 4 chama de tirar o freio. Volte a pedir confirmação."
+          "texto": "Aprovaçêo permanente em ferramenta com consequência é o que o curso 4 chama de tirar o freio. Volte a pedir confirmaçêo."
         }
       },
       "licao": "Ferramenta só de leitura pode ser aprovada sem pergunta; ferramenta com consequência pede o seu sim a cada vez."
@@ -230,17 +230,17 @@
     {
       "tipo": "codigo",
       "titulo": "Descreva o servidor para o Registry (sem publicar)",
-      "sub": "Registry em preview em 19/10/2026. Precisa do mcp-publisher (releases do repositório modelcontextprotocol/registry). validate consulta registry.modelcontextprotocol.io e não publica nada.",
+      "sub": "Registry em preview em 19/10/2026. Precisa do mcp-publisher (releases do repositório modelcontextprotocol/registry). validate consulta registry.modelcontextprotocol.io e nêo publica nada.",
       "blocos": [
         {
           "rot": "Arquivo · kit/server.json",
           "icone": "arquivo",
-          "conteudo": "{\n  \"$schema\": \"https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json\",\n  \"name\": \"io.github.seu-usuario/turmas\",\n  \"title\": \"Turmas\",\n  \"description\": \"Busca turmas e reserva vaga com confirmação do usuário.\",\n  \"repository\": {\n    \"url\": \"https://github.com/seu-usuario/turmas-mcp\",\n    \"source\": \"github\"\n  },\n  \"version\": \"1.0.0\",\n  \"remotes\": [\n    {\n      \"type\": \"streamable-http\",\n      \"url\": \"https://turmas.exemplo.com/mcp\"\n    }\n  ]\n}"
+          "conteudo": "{\n  \"$schema\": \"https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json\",\n  \"name\": \"io.github.seu-usuario/turmas\",\n  \"title\": \"Turmas\",\n  \"description\": \"Busca turmas e reserva vaga com confirmaçêo do usuário.\",\n  \"repository\": {\n    \"url\": \"https://github.com/seu-usuario/turmas-mcp\",\n    \"source\": \"github\"\n  },\n  \"version\": \"1.0.0\",\n  \"remotes\": [\n    {\n      \"type\": \"streamable-http\",\n      \"url\": \"https://turmas.exemplo.com/mcp\"\n    }\n  ]\n}"
         },
         {
           "rot": "Terminal · validar",
           "icone": "terminal",
-          "conteudo": "cd ~/projetos/formacao-webmcp-mcp-v72/kit\nmcp-publisher validate      # lê server.json da pasta; não publica nada\necho \"saída: $?\""
+          "conteudo": "cd ~/projetos/formacao-webmcp-mcp-v72/kit\nmcp-publisher validate      # lê server.json da pasta; nêo publica nada\necho \"saída: $?\""
         }
       ],
       "saida": {
@@ -251,8 +251,8 @@
             "html": "<pre>Validating against https://registry.modelcontextprotocol.io...\n✅ server.json is valid\nsaída: 0</pre>"
           },
           {
-            "rot": "Erro comum: descrição longa",
-            "html": "<pre>Validating against https://registry.modelcontextprotocol.io...\nError: validation failed: server returned status 422: {\"title\":\"Unprocessable Entity\",\"status\":422,\"detail\":\"validation failed\",\"errors\":[{\"message\":\"expected length &lt;= 100\",\"location\":\"body.description\",\"value\":\"Busca turmas e reserva vaga com confirmação do usuário, mostra painel, conversa com o agente e muito mais coisas úteis aqui.\"}]}\n\nsaída: 1</pre><p>O Registry limita <code>description</code> a 100 caracteres.</p>"
+            "rot": "Erro comum: descriçêo longa",
+            "html": "<pre>Validating against https://registry.modelcontextprotocol.io...\nError: validation failed: server returned status 422: {\"title\":\"Unprocessable Entity\",\"status\":422,\"detail\":\"validation failed\",\"errors\":[{\"message\":\"expected length &lt;= 100\",\"location\":\"body.description\",\"value\":\"Busca turmas e reserva vaga com confirmaçêo do usuário, mostra painel, conversa com o agente e muito mais coisas úteis aqui.\"}]}\n\nsaída: 1</pre><p>O Registry limita <code>description</code> a 100 caracteres.</p>"
           }
         ]
       }
@@ -274,7 +274,7 @@
           "titulo": "E22 · No Claude Code",
           "min": "10 min",
           "texto": "Rode o bloco do Claude Code, abra <code>claude</code> na pasta, aprove o servidor e peça \"tem turma de html com vaga?\". Use o modelo da sua assinatura com parcimônia: uma pergunta basta.",
-          "pronto": "<code>claude mcp list | grep turmas</code> → linha terminando em <code>✔ Connected</code> (o texto da resposta do modelo não é critério)."
+          "pronto": "<code>claude mcp list | grep turmas</code> → linha terminando em <code>✔ Connected</code> (o texto da resposta do modelo nêo é critério)."
         },
         {
           "id": "e23",
@@ -287,7 +287,7 @@
           "id": "e24",
           "titulo": "E24 · server.json do seu serviço",
           "min": "10 min",
-          "texto": "Troque nome, descrição, repositório e URL no <code>server.json</code> pelos do seu serviço. Publicar é opcional e exige namespace verificado.",
+          "texto": "Troque nome, descriçêo, repositório e URL no <code>server.json</code> pelos do seu serviço. Publicar é opcional e exige namespace verificado.",
           "pronto": "<code>mcp-publisher validate</code> → <code>✅ server.json is valid</code>."
         }
       ]
@@ -321,7 +321,7 @@
           "quando": "Aulas 5–6",
           "titulo": "Freios",
           "sub": "MRTR + token",
-          "saida": "Confirmação no meio e escopo mínimo.",
+          "saida": "Confirmaçêo no meio e escopo mínimo.",
           "passo": "Consequência pede sim; remoto pede token com o escopo certo."
         },
         {
@@ -336,7 +336,7 @@
       ],
       "resultado": {
         "titulo": "Ao final do curso",
-        "texto": "Um servidor MCP na revisão 2026-07-28, testado e ligado ao seu agente.",
+        "texto": "Um servidor MCP na revisêo 2026-07-28, testado e ligado ao seu agente.",
         "total": "24 exercícios"
       },
       "legenda": "Ordem sugerida: cada par de aulas usa o kit da anterior."
@@ -365,11 +365,11 @@
           "aula": "http-sem-estado"
         },
         {
-          "titulo": "Aula 5 · Confirmação (MRTR)",
+          "titulo": "Aula 5 · Confirmaçêo (MRTR)",
           "aula": "confirmacao-mrtr"
         },
         {
-          "titulo": "Aula 6 · Autorização",
+          "titulo": "Aula 6 · Autorizaçêo",
           "aula": "autorizacao"
         },
         {
@@ -399,7 +399,7 @@
       "titulo": "Teste da aula",
       "perguntas": [
         {
-          "p": "Por que a bateria usa handler.fetch e não InMemoryTransport para testar a revisão nova?",
+          "p": "Por que a bateria usa handler.fetch e nêo InMemoryTransport para testar a revisêo nova?",
           "opcoes": [
             "handler.fetch é mais rápido e por isso é o recomendado",
             "InMemoryTransport precisa de porta",
@@ -417,10 +417,10 @@
             "Abrir o claude na pasta e aprovar o servidor",
             "Publicar o servidor no Registry oficial antes de usar",
             "Instalar o Inspector",
-            "Gerar um token OAuth e passar no cabeçalho da conexão"
+            "Gerar um token OAuth e passar no cabeçalho da conexêo"
           ],
           "certa": 0,
-          "explica": "Servidor de projeto (.mcp.json) pede aprovação na primeira vez. Aprovado, aparece ✔ Connected.",
+          "explica": "Servidor de projeto (.mcp.json) pede aprovaçêo na primeira vez. Aprovado, aparece ✔ Connected.",
           "ref": "codigo",
           "cert": true
         },
@@ -433,13 +433,13 @@
             "Valida o server.json sem publicar"
           ],
           "certa": 3,
-          "explica": "Valida contra o Registry e não publica. Publicar é outro comando e exige namespace verificado.",
+          "explica": "Valida contra o Registry e nêo publica. Publicar é outro comando e exige namespace verificado.",
           "ref": "codigo"
         },
         {
           "p": "Em 19/10/2026, como o Registry oficial deve ser tratado?",
           "opcoes": [
-            "Como padrão estável e obrigatório",
+            "Como padrêo estável e obrigatório",
             "Como preview, sujeito a mudança e reset",
             "Como substituto do npm para distribuir o pacote",
             "Como lista fechada só para empresas"
@@ -485,7 +485,7 @@
           "href": "https://modelcontextprotocol.io/registry/about"
         },
         {
-          "t": "Evals e verificação a fundo (LOOP-R Engenharia)",
+          "t": "Evals e verificaçêo a fundo (LOOP-R Engenharia)",
           "href": "https://linnoff88-dev.github.io/
         },
         {

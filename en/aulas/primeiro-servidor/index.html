@@ -43,7 +43,7 @@ import * as z from &#x27;zod/v4&#x27;;
 export const TURMAS = [
   { id: &#x27;html-01&#x27;, titulo: &#x27;HTML semântico para agentes&#x27;, vagas: 3 },
   { id: &#x27;mcp-01&#x27;, titulo: &#x27;Servidor MCP em uma tarde&#x27;, vagas: 1 },
-  { id: &#x27;mcp-02&#x27;, titulo: &#x27;MCP com autorização&#x27;, vagas: 0 }
+  { id: &#x27;mcp-02&#x27;, titulo: &#x27;MCP com autorizaçêo&#x27;, vagas: 0 }
 ];
 
 const Turma = z.object({ id: z.string(), titulo: z.string(), vagas: z.int() });
@@ -57,10 +57,10 @@ export function createServer() {
     &#x27;buscar_turmas&#x27;,
     {
       title: &#x27;Buscar turmas&#x27;,
-      description: &#x27;Lista turmas cujo título contém o termo. Só leitura: não reserva nada.&#x27;,
+      description: &#x27;Lista turmas cujo título contém o termo. Só leitura: nêo reserva nada.&#x27;,
       inputSchema: z.object({
         termo: z.string().min(2).describe(&#x27;Parte do título, ex.: &quot;mcp&quot;&#x27;),
-        limite: z.int().min(1).max(20).optional().describe(&#x27;Máximo de turmas (padrão 5)&#x27;)
+        limite: z.int().min(1).max(20).optional().describe(&#x27;Máximo de turmas (padrêo 5)&#x27;)
       }),
       outputSchema: z.object({ turmas: z.array(Turma) }),
       annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false }
@@ -80,7 +80,7 @@ export function createServer() {
     &#x27;reservar_vaga&#x27;,
     {
       title: &#x27;Reservar vaga&#x27;,
-      description: &#x27;Reserva uma vaga na turma para o e-mail informado. Tem consequência: pede confirmação antes.&#x27;,
+      description: &#x27;Reserva uma vaga na turma para o e-mail informado. Tem consequência: pede confirmaçêo antes.&#x27;,
       inputSchema: z.object({
         turma_id: z.string().describe(&#x27;Id da turma, ex.: &quot;mcp-01&quot;&#x27;),
         email: z.email().describe(&#x27;E-mail de quem vai fazer a turma&#x27;)
@@ -91,7 +91,7 @@ export function createServer() {
     },
     async ({ turma_id, email }, ctx) =&gt; {
       const turma = TURMAS.find(x =&gt; x.id === turma_id);
-      if (!turma) return { content: [{ type: &#x27;text&#x27;, text: `turma ${turma_id} não existe` }], isError: true };
+      if (!turma) return { content: [{ type: &#x27;text&#x27;, text: `turma ${turma_id} nêo existe` }], isError: true };
       if (turma.vagas &lt; 1) return { content: [{ type: &#x27;text&#x27;, text: `turma ${turma_id} sem vagas` }], isError: true };
 
       const resposta = inputResponse(ctx.mcpReq.inputResponses, &#x27;confirmar&#x27;);
